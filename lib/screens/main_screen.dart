@@ -191,6 +191,7 @@ class _MainScreenState extends State<MainScreen> {
             .contains(true) ||
         tempNextPeacePos.last >= 10 * columnLength) {
       listPixelInBoard.addAll(currentPeace);
+      _clearWonRow();
       _addNewPeace();
     } else {
       setState(() {
@@ -200,8 +201,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _clearWonRow() {
-    //temp
-    for (var i = columnLength - 1; i >= 0; i++) {
+    for (var i = columnLength - 1; i >= 0; i--) {
       List<bool> rowCheck = [];
       for (var j = 0; j < 10; j++) {
         if (listPixelInBoard.contains(10 * i + j)) {
@@ -216,12 +216,16 @@ class _MainScreenState extends State<MainScreen> {
             listPixelInBoard.remove(10 * i + k);
           });
         }
-        setState(() {
-          for (var item in listPixelInBoard) {
-            if (item < i * 10) {
-              item + 10;
-            }
+        List<int> newPixelList = [];
+        for (var item in listPixelInBoard) {
+          if (item < i * 10) {
+            newPixelList.add(item + 10);
+          } else {
+            newPixelList.add(item);
           }
+        }
+        setState(() {
+          listPixelInBoard = newPixelList;
         });
       }
     }
